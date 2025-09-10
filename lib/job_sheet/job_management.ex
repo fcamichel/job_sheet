@@ -92,7 +92,7 @@ defmodule JobSheet.JobManagement do
   def create_task(attrs \\ %{}, user_id) do
     Repo.transaction(fn ->
       task_attrs = Map.put(attrs, "user_id", user_id)
-      
+
       case %Task{}
            |> Task.changeset(task_attrs)
            |> Repo.insert() do
@@ -100,6 +100,7 @@ defmodule JobSheet.JobManagement do
           # Create history entry
           create_task_history(task.id, user_id, "created", %{})
           task
+
         {:error, changeset} ->
           Repo.rollback(changeset)
       end
@@ -110,20 +111,22 @@ defmodule JobSheet.JobManagement do
     Repo.transaction(fn ->
       # Track changes before update
       changes = track_changes(task, attrs)
-      
+
       case task
            |> Task.changeset(attrs)
            |> Repo.update() do
         {:ok, updated_task} ->
           # Create history entry
-          action = if Map.get(attrs, "completed") != task.completed do
-            if Map.get(attrs, "completed"), do: "completed", else: "uncompleted"
-          else
-            "updated"
-          end
-          
+          action =
+            if Map.get(attrs, "completed") != task.completed do
+              if Map.get(attrs, "completed"), do: "completed", else: "uncompleted"
+            else
+              "updated"
+            end
+
           create_task_history(updated_task.id, user_id, action, changes)
           updated_task
+
         {:error, changeset} ->
           Repo.rollback(changeset)
       end
@@ -134,7 +137,7 @@ defmodule JobSheet.JobManagement do
     Repo.transaction(fn ->
       # Create history entry before deletion
       create_task_history(task.id, user_id, "deleted", %{})
-      
+
       case Repo.delete(task) do
         {:ok, task} -> task
         {:error, changeset} -> Repo.rollback(changeset)
@@ -162,7 +165,7 @@ defmodule JobSheet.JobManagement do
       "institution_id" => task.institution_id,
       "completed" => false
     }
-    
+
     create_task(task_attrs, user_id)
   end
 
@@ -191,6 +194,7 @@ defmodule JobSheet.JobManagement do
     attrs
     |> Enum.reduce(%{}, fn {key, value}, acc ->
       old_value = Map.get(task, String.to_existing_atom(key))
+
       if old_value != value do
         Map.put(acc, key, %{"old" => old_value, "new" => value})
       else

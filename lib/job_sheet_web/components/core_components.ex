@@ -497,7 +497,6 @@ defmodule JobSheetWeb.CoreComponents do
     |> JS.add_class("hidden", to: "##{id}")
   end
 
-
   ## Translation Helpers
 
   defp translate_error({msg, opts}) do

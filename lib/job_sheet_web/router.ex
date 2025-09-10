@@ -46,15 +46,15 @@ defmodule JobSheetWeb.Router do
       live "/dashboard", DashboardLive.Index, :index
       live "/dashboard/categories/new", DashboardLive.Index, :new_category
       live "/dashboard/categories/:id/edit", DashboardLive.Index, :edit_category
-      
+
       live "/dashboard/institutions/new", DashboardLive.Index, :new_institution
       live "/dashboard/institutions/:id/edit", DashboardLive.Index, :edit_institution
-      
+
       live "/categories/:category_id", CategoryLive.Show, :show
       live "/categories/:category_id/tasks/new", CategoryLive.Show, :new_task
       live "/categories/:category_id/tasks/:id/edit", CategoryLive.Show, :edit_task
       live "/categories/:category_id/tasks/:id/history", CategoryLive.Show, :task_history
-      
+
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end

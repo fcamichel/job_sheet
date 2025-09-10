@@ -21,7 +21,15 @@ defmodule JobSheet.JobManagement.Task do
 
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :description, :completed, :completed_at, :category_id, :institution_id, :user_id])
+    |> cast(attrs, [
+      :title,
+      :description,
+      :completed,
+      :completed_at,
+      :category_id,
+      :institution_id,
+      :user_id
+    ])
     |> validate_required([:title, :category_id, :institution_id, :user_id])
     |> validate_length(:title, min: 1, max: 255)
     |> maybe_set_completed_at()
@@ -31,8 +39,10 @@ defmodule JobSheet.JobManagement.Task do
     case get_change(changeset, :completed) do
       true ->
         put_change(changeset, :completed_at, DateTime.utc_now() |> DateTime.truncate(:second))
+
       false ->
         put_change(changeset, :completed_at, nil)
+
       _ ->
         changeset
     end
