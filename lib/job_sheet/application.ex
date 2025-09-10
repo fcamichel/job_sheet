@@ -8,7 +8,6 @@ defmodule JobSheet.Application do
     children = [
       JobSheetWeb.Telemetry,
       JobSheet.Repo,
-      {DNSCluster, query: Application.get_env(:job_sheet, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: JobSheet.PubSub},
       {Finch, name: JobSheet.Finch},
       JobSheetWeb.Endpoint
