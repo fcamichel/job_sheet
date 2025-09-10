@@ -6,6 +6,9 @@ defmodule JobSheetWeb.UserAuth do
 
   alias JobSheet.Accounts
 
+  @remember_me_cookie "_job_sheet_web_user_remember_me"
+  @remember_me_options [sign: true, max_age: 5_184_000, same_site: "Lax"]
+
   def log_in_user(conn, user, params \\ %{}) do
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
